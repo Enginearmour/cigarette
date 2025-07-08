@@ -1,0 +1,655 @@
+.app {
+  text-align: center;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.header-content {
+  flex: 1;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 8px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  font-weight: 300;
+}
+
+.minimize-button {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: white;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.minimize-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+/* Minimized Mode Styles */
+.minimized-app {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 999999; /* Highest possible z-index */
+}
+
+.floating-icon {
+  position: fixed;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: none;
+  cursor: grab;
+  font-size: 2rem;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  pointer-events: all;
+  user-select: none;
+  backdrop-filter: blur(10px);
+  z-index: 999999; /* Highest possible z-index */
+}
+
+.floating-icon.dragging {
+  cursor: grabbing;
+  transform: scale(1.1);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  transition: none; /* Disable transitions while dragging */
+}
+
+/* Default state - red/orange gradient */
+.floating-icon:not(.disabled) {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+  box-shadow: 0 4px 20px rgba(238, 90, 36, 0.6);
+}
+
+.floating-icon:not(.disabled):hover:not(.dragging) {
+  transform: scale(1.1);
+  box-shadow: 0 6px 25px rgba(238, 90, 36, 0.8);
+}
+
+/* Green state when smoking is allowed in quitting mode */
+.floating-icon.ready {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  box-shadow: 0 4px 20px rgba(40, 167, 69, 0.6);
+}
+
+.floating-icon.ready:hover:not(.dragging) {
+  transform: scale(1.1);
+  box-shadow: 0 6px 25px rgba(40, 167, 69, 0.8);
+}
+
+.floating-icon.disabled {
+  background: linear-gradient(135deg, #666, #555);
+  cursor: grab;
+  opacity: 0.7;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.floating-icon.disabled.dragging {
+  cursor: grabbing;
+}
+
+.floating-icon.disabled:hover:not(.dragging) {
+  transform: none;
+}
+
+.floating-icon:active:not(.disabled):not(.dragging) {
+  transform: scale(0.95);
+}
+
+.floating-icon-emoji {
+  font-size: 2.2rem;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.floating-icon-count {
+  font-size: 1rem;
+  font-weight: bold;
+  line-height: 1;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+
+/* Daily Counter Styles */
+.daily-counter {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 193, 7, 0.1));
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 30px;
+  border: 2px solid rgba(255, 215, 0, 0.3);
+  box-shadow: 0 8px 32px rgba(255, 215, 0, 0.2);
+}
+
+.daily-count-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.daily-count-number {
+  font-size: 5rem;
+  font-weight: bold;
+  line-height: 1;
+  color: #ffd700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  margin-bottom: 8px;
+}
+
+.daily-count-label {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #ffd700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.daily-counter-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.daily-date {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #ffd700;
+  opacity: 0.9;
+}
+
+.reset-daily-button {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 8px 16px;
+  color: white;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.reset-daily-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Quitting Mode Styles */
+.quitting-section {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 25px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.quitting-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.3);
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #4CAF50;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+.toggle-label {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.settings-button {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.settings-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.settings-panel {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.setting-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.setting-item label {
+  font-weight: 500;
+}
+
+.percentage-input, .minutes-input {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.percentage-input input, .minutes-input input {
+  width: 80px;
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 1rem;
+}
+
+.percentage-input input:focus, .minutes-input input:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.setting-info {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  text-align: left;
+}
+
+.setting-info p {
+  margin: 5px 0;
+}
+
+.quitting-status {
+  display: flex;
+  justify-content: space-around;
+  gap: 20px;
+}
+
+.status-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.status-label {
+  font-size: 0.9rem;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.status-value {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #4CAF50;
+}
+
+.main-counter {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 40px 30px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.count-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.count-number {
+  font-size: 4rem;
+  font-weight: bold;
+  line-height: 1;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.count-label {
+  font-size: 1.2rem;
+  opacity: 0.8;
+  margin-top: 8px;
+}
+
+.time-since-last, .time-until-next {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.time-label {
+  font-size: 0.9rem;
+  opacity: 0.7;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.time-value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ffd700;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.time-value.countdown {
+  color: #ff6b6b;
+}
+
+.add-button {
+  border: none;
+  border-radius: 50px;
+  padding: 20px 40px;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 auto;
+}
+
+/* Default state - red/orange gradient */
+.add-button:not(.disabled) {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+  box-shadow: 0 4px 15px rgba(238, 90, 36, 0.4);
+}
+
+.add-button:not(.disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(238, 90, 36, 0.6);
+}
+
+/* Green state when smoking is allowed in quitting mode */
+.add-button.ready {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+}
+
+.add-button.ready:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.6);
+}
+
+.add-button:active:not(.disabled) {
+  transform: translateY(0);
+}
+
+.add-button.disabled {
+  background: linear-gradient(135deg, #666, #555);
+  cursor: not-allowed;
+  opacity: 0.6;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.button-icon {
+  font-size: 1.5rem;
+}
+
+.wait-message {
+  margin-top: 15px;
+  font-size: 1rem;
+  color: #ff6b6b;
+  font-weight: 500;
+}
+
+.history {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.history-header h3 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.clear-button {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 8px 16px;
+  color: white;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.clear-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.history-time {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.gap-time {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.gap-time.short {
+  background: rgba(255, 107, 107, 0.3);
+  color: #ff6b6b;
+}
+
+.gap-time.medium {
+  background: rgba(255, 193, 7, 0.3);
+  color: #ffc107;
+}
+
+.gap-time.long {
+  background: rgba(40, 167, 69, 0.3);
+  color: #28a745;
+}
+
+.first-cigarette {
+  color: #17a2b8;
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  opacity: 0.7;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .app {
+    padding: 15px;
+    gap: 20px;
+  }
+  
+  .header {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .header h1 {
+    font-size: 2rem;
+  }
+  
+  .daily-count-number {
+    font-size: 4rem;
+  }
+  
+  .count-number {
+    font-size: 3rem;
+  }
+  
+  .main-counter {
+    padding: 30px 20px;
+  }
+  
+  .history-item {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+  
+  .history-header {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .quitting-toggle {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .quitting-status {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .setting-item {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .daily-counter-actions {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .floating-icon {
+    width: 70px;
+    height: 70px;
+  }
+
+  .floating-icon-emoji {
+    font-size: 1.8rem;
+  }
+
+  .floating-icon-count {
+    font-size: 0.9rem;
+  }
+}
